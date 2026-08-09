@@ -17,6 +17,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final pages = OnboardingData.pages;
 
+  bool get _isLastPage => _currentPage == pages.length - 1;
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -24,7 +26,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _nextPage() {
-    if (_currentPage == pages.length - 1) {
+    if (_isLastPage) {
+      _getStarted();
       return;
     }
 
@@ -35,11 +38,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _skip() {
+    if (_isLastPage) {
+      return;
+    }
+
     _pageController.animateToPage(
       pages.length - 1,
       duration: const Duration(milliseconds: 350),
       curve: Curves.easeOut,
     );
+  }
+
+  void _getStarted() {
+    // Login screen next feature.
+    //
+    // Navigation intentionally left empty for now
+    // because LoginScreen has not been created yet.
   }
 
   @override
@@ -58,9 +72,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 child: TextButton(
                   onPressed: _skip,
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
+                  child: Text(
+                    _isLastPage ? '' : 'Skip',
+                    style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -110,23 +124,47 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                   const Spacer(),
 
-                  GestureDetector(
-                    onTap: _nextPage,
-                    child: Container(
-                      width: 58,
-                      height: 58,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(18),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFFFFA726),
-                            Color(0xFFFF6D00),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    child: GestureDetector(
+                      onTap: _nextPage,
+                      child: Container(
+                        height: 58,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: _isLastPage ? 24 : 0,
+                        ),
+                        width: _isLastPage ? 150 : 58,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFFFFA726),
+                              Color(0xFFFF6D00),
+                            ],
+                          ),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x33FF7800),
+                              blurRadius: 18,
+                              offset: Offset(0, 8),
+                            ),
                           ],
                         ),
-                      ),
-                      child: const Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Colors.white,
+                        child: Center(
+                          child: _isLastPage
+                              ? const Text(
+                                  'Get Started',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.arrow_forward_rounded,
+                                  color: Colors.white,
+                                ),
+                        ),
                       ),
                     ),
                   ),
