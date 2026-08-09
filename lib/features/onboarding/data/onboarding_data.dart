@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../domain/onboarding_page.dart';
 
 class OnboardingData {
@@ -7,20 +9,20 @@ class OnboardingData {
     OnboardingPage(
       title: 'Run Your Restaurant Smarter',
       description:
-          'Manage your restaurant operations from one intelligent workspace.',
-      icon: 'restaurant',
+          'Manage your restaurant operations from one intelligent platform.',
+      icon: Icons.restaurant_rounded,
     ),
     OnboardingPage(
-      title: 'Automate Repetitive Work',
+      title: 'Automate Daily Operations',
       description:
-          'Simplify everyday tasks and spend more time growing your restaurant.',
-      icon: 'auto_awesome',
+          'Reduce repetitive work and let FoodOrbit handle the routine tasks.',
+      icon: Icons.auto_awesome_rounded,
     ),
     OnboardingPage(
-      title: 'Grow With AI Insights',
+      title: 'Grow With Better Insights',
       description:
-          'Turn your restaurant data into smarter decisions and better operations.',
-      icon: 'insights',
+          'Understand your business better with smart insights and automation.',
+      icon: Icons.insights_rounded,
     ),
   ];
 }
