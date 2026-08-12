@@ -16,6 +16,7 @@ class FoodOrbitApp extends StatelessWidget {
       title: 'FoodOrbit',
       theme: ThemeData.dark(),
       home: const SplashScreen(),
+
     );
   }
 }

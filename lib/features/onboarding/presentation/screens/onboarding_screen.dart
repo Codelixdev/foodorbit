@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/onboarding_data.dart';
 import '../widgets/onboarding_page_view.dart';
+import '../../../auth/presentation/screens/login_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -26,34 +27,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _nextPage() {
-    if (_isLastPage) {
-      _getStarted();
+    // Normal pages
+    if (_currentPage < pages.length - 1) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOut,
+      );
       return;
     }
 
-    _pageController.nextPage(
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeOut,
+    // Last page → Login
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const LoginScreen(),
+      ),
     );
   }
 
   void _skip() {
-    if (_isLastPage) {
-      return;
-    }
-
-    _pageController.animateToPage(
-      pages.length - 1,
-      duration: const Duration(milliseconds: 350),
-      curve: Curves.easeOut,
+    // Skip → Login
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const LoginScreen(),
+      ),
     );
-  }
-
-  void _getStarted() {
-    // Login screen next feature.
-    //
-    // Navigation intentionally left empty for now
-    // because LoginScreen has not been created yet.
   }
 
   @override
@@ -63,6 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
+            // Skip button
             Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -71,7 +69,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   right: 20,
                 ),
                 child: TextButton(
-                  onPressed: _skip,
+                  onPressed: _isLastPage ? null : _skip,
                   child: Text(
                     _isLastPage ? '' : 'Skip',
                     style: const TextStyle(
@@ -84,11 +82,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
 
+            // Pages
             Expanded(
               child: OnboardingPageView(
                 controller: _pageController,
                 pages: pages,
                 onPageChanged: (index) {
+                  if (!mounted) return;
+
                   setState(() {
                     _currentPage = index;
                   });
@@ -96,10 +97,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
 
+            // Bottom navigation
             Padding(
-              padding: const EdgeInsets.fromLTRB(28, 10, 28, 28),
+              padding: const EdgeInsets.fromLTRB(
+                28,
+                10,
+                28,
+                28,
+              ),
               child: Row(
                 children: [
+                  // Page indicators
                   Row(
                     children: List.generate(
                       pages.length,
@@ -124,32 +132,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                   const Spacer(),
 
+                  // Next / Get Started
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 250),
-                    child: GestureDetector(
-                      onTap: _nextPage,
-                      child: Container(
-                        height: 58,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: _isLastPage ? 24 : 0,
+                    height: 58,
+                    width: _isLastPage ? 150 : 58,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: _isLastPage ? 24 : 0,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFFFFA726),
+                          Color(0xFFFF6D00),
+                        ],
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x33FF7800),
+                          blurRadius: 18,
+                          offset: Offset(0, 8),
                         ),
-                        width: _isLastPage ? 150 : 58,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(18),
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFFFFA726),
-                              Color(0xFFFF6D00),
-                            ],
-                          ),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color(0x33FF7800),
-                              blurRadius: 18,
-                              offset: Offset(0, 8),
-                            ),
-                          ],
-                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(18),
+                        onTap: _nextPage,
                         child: Center(
                           child: _isLastPage
                               ? const Text(
