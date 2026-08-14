@@ -114,15 +114,31 @@ void _createAccount() {
     );
   }
 
-  void _googleSignIn() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Google authentication will be connected next.',
-        ),
+  Future<void> _googleSignIn() async {
+  if (_isLoading) return;
+
+  setState(() {
+    _isLoading = true;
+  });
+
+  await Future.delayed(
+    const Duration(milliseconds: 700),
+  );
+
+  if (!mounted) return;
+
+  setState(() {
+    _isLoading = false;
+  });
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text(
+        'Google Sign-In will be connected with Firebase next.',
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {

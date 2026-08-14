@@ -416,35 +416,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
 
-                const SizedBox(height: 18),
+ const SizedBox(height: 18),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: 54,
-                  child: OutlinedButton.icon(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.g_mobiledata_rounded,
-                      size: 28,
-                      color: Colors.white,
-                    ),
-                    label: const Text(
-                      'Continue with Google',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(
-                        color: Colors.white12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                    ),
-                  ),
-                ),
+SizedBox(
+  width: double.infinity,
+  height: 54,
+  child: OutlinedButton(
+    onPressed: () {},
+    style: OutlinedButton.styleFrom(
+      backgroundColor: const Color(0xFF101014),
+      foregroundColor: Colors.white,
+      side: const BorderSide(
+        color: Color(0xFF29292F),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const _GoogleIcon(),
+        const SizedBox(width: 12),
+        const Text(
+          'Continue with Google',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 13,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
+    ),
+  ),
+),
 
                 const SizedBox(height: 24),
 
@@ -477,5 +482,100 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+}
+class _GoogleIcon extends StatelessWidget {
+  const _GoogleIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 20,
+      height: 20,
+      child: CustomPaint(
+        painter: _GoogleIconPainter(),
+      ),
+    );
+  }
+}
+
+class _GoogleIconPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(
+      size.width / 2,
+      size.height / 2,
+    );
+
+    final radius = size.width * 0.42;
+
+    final rect = Rect.fromCircle(
+      center: center,
+      radius: radius,
+    );
+
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3.2
+      ..strokeCap = StrokeCap.butt;
+
+    // Blue
+    paint.color = const Color(0xFF4285F4);
+    canvas.drawArc(
+      rect,
+      -0.55,
+      2.05,
+      false,
+      paint,
+    );
+
+    // Green
+    paint.color = const Color(0xFF34A853);
+    canvas.drawArc(
+      rect,
+      1.50,
+      1.15,
+      false,
+      paint,
+    );
+
+    // Yellow
+    paint.color = const Color(0xFFFBBC05);
+    canvas.drawArc(
+      rect,
+      2.65,
+      1.05,
+      false,
+      paint,
+    );
+
+    // Red
+    paint.color = const Color(0xFFEA4335);
+    canvas.drawArc(
+      rect,
+      3.70,
+      1.60,
+      false,
+      paint,
+    );
+
+    // Google G horizontal bar
+    final bluePaint = Paint()
+      ..color = const Color(0xFF4285F4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3.2;
+
+    canvas.drawLine(
+      Offset(size.width * 0.48, size.height * 0.5),
+      Offset(size.width * 0.91, size.height * 0.5),
+      bluePaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(
+    covariant CustomPainter oldDelegate,
+  ) {
+    return false;
   }
 }
