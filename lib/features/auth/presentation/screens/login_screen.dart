@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'register_screen.dart';
 
 import '../../../onboarding/presentation/screens/onboarding_screen.dart';
 
@@ -95,16 +96,13 @@ class _LoginScreenState extends State<LoginScreen> {
       (route) => false,
     );
   }
-
-  void _createAccount() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text(
-          'Registration screen will be added next.',
-        ),
-      ),
-    );
-  }
+void _createAccount() {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => const RegisterScreen(),
+    ),
+  );
+}
 
   void _forgotPassword() {
     ScaffoldMessenger.of(context).showSnackBar(
